@@ -10,6 +10,7 @@ Built for the Taskmaster category of the All Things Agentic Hackathon.
 ## Try it
 
 - **Live public demo** (no login required, safe fabricated data): _add your deployed `fraud-agent-demo` Cloud Run URL here_
+- **Architecture diagram**: [`architecture-diagram.svg`](./architecture-diagram.svg)
 - **Full write-up**: see [`ABOUT.md`](./ABOUT.md) for inspiration, architecture, and what we learned building this
 
 ## Repo layout
