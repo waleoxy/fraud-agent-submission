@@ -1,0 +1,25 @@
+{
+  "name": "fraud-agent-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Public, credential-free demo of fraud-agent-core — mock ERP data, real Gemini 3.5 investigation, live SSE stream of tool calls.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "fraud-agent-core": "^0.3.0",
+    "@nestjs/common": "^12.0.0",
+    "@nestjs/core": "^12.0.0",
+    "@nestjs/platform-express": "^12.0.0",
+    "@nestjs/axios": "^12.0.0",
+    "axios": "^1.7.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^20.0.0",
+    "@types/express": "^4.17.0"
+  }
+}

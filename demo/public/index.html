@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Fraud Resolution Agent — Live Demo</title>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 680px; margin: 40px auto; padding: 0 20px; color: #1a1a1a; }
+  h1 { font-size: 1.4rem; }
+  p.sub { color: #555; margin-top: -8px; }
+  select, button, textarea { font-size: 1rem; padding: 8px; margin: 6px 0; width: 100%; box-sizing: border-box; }
+  button { background: #111; color: white; border: none; cursor: pointer; font-weight: 600; }
+  button:disabled { background: #999; cursor: wait; }
+  #log { background: #0d1117; color: #c9d1d9; padding: 16px; border-radius: 8px; font-family: monospace;
+         font-size: 0.85rem; white-space: pre-wrap; min-height: 160px; margin-top: 16px; line-height: 1.5; }
+  .step { color: #79c0ff; }
+  .result-step { color: #7ee787; }
+  .err { color: #ff7b72; }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+  .cleared { background: #d1f7d6; color: #0a5c1c; }
+  .reversed { background: #ffe1a8; color: #7a4a00; }
+  .escalated { background: #ffd3d3; color: #8a1010; }
+</style>
+</head>
+<body>
+  <h1>Fraud Resolution Agent — Live Demo</h1>
+  <p class="sub">Watch a real Gemini 3.5 investigation happen live, tool call by tool call, against safe fabricated ERP data.</p>
+
+  <label for="scenario">Pick a flagged-transaction scenario</label>
+  <select id="scenario">
+    <option value="normal">Unusual quantity on an otherwise clean account</option>
+    <option value="risky">Large order from a counterparty with a prior incident</option>
+    <option value="custom">Custom flag reason</option>
+  </select>
+
+  <div id="customWrap" style="display:none">
+    <label for="customReason">Flag reason</label>
+    <textarea id="customReason" rows="2">Unusual quantity ordered right before month-end close</textarea>
+  </div>
+
+  <button id="runBtn">Run investigation</button>
+
+  <div id="log">Waiting to run...</div>
+
+  <script>
+    const scenarios = {
+      normal: { subjectId: 'branch_demo_1', counterpartyId: 'supplier_demo_1', flagReason: 'Unusual quantity ordered right before month-end close' },
+      risky:  { subjectId: 'branch_demo_2', counterpartyId: 'supplier_demo_2', flagReason: 'Large order value from a counterparty with a prior delayed-delivery incident' },
+    };
+
+    const scenarioEl = document.getElementById('scenario');
+    const customWrap = document.getElementById('customWrap');
+    scenarioEl.addEventListener('change', () => {
+      customWrap.style.display = scenarioEl.value === 'custom' ? 'block' : 'none';
+    });
+
+    function line(cls, text) {
+      const log = document.getElementById('log');
+      const div = document.createElement('div');
+      div.className = cls;
+      div.textContent = text;
+      log.appendChild(div);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    document.getElementById('runBtn').addEventListener('click', () => {
+      const btn = document.getElementById('runBtn');
+      const log = document.getElementById('log');
+      btn.disabled = true;
+      log.innerHTML = '';
+
+      let params;
+      if (scenarioEl.value === 'custom') {
+        params = { subjectId: 'branch_demo_custom', counterpartyId: 'supplier_demo_custom', flagReason: document.getElementById('customReason').value };
+      } else {
+        params = scenarios[scenarioEl.value];
+      }
+
+      const qs = new URLSearchParams(params).toString();
+      const es = new EventSource('/demo/stream?' + qs);
+
+      es.addEventListener('run_start', () => line('step', '▶ Investigation started...'));
+
+      es.addEventListener('tool_call', (e) => {
+        const d = JSON.parse(e.data);
+        line('step', '→ Calling ' + d.tool + '(' + JSON.stringify(d.input) + ')');
+      });
+
+      es.addEventListener('tool_result', (e) => {
+        const d = JSON.parse(e.data);
+        line('result-step', '✓ ' + d.tool + ' returned: ' + JSON.stringify(d.output).slice(0, 160));
+      });
+
+      es.addEventListener('tool_error', (e) => {
+        const d = JSON.parse(e.data);
+        line('err', '✗ ' + d.tool + ' failed: ' + d.error);
+      });
+
+      es.addEventListener('run_complete', (e) => {
+        const d = JSON.parse(e.data);
+        const r = d.result;
+        const badgeClass = r.resolution === 'cleared' ? 'cleared' : r.resolution === 'reversed' ? 'reversed' : 'escalated';
+        line('step', '\n■ Resolution: ' + r.resolution.toUpperCase());
+        line('step', 'Reasoning: ' + r.reasoning);
+        line('step', 'Alert sent: ' + r.alertSent);
+        es.close();
+        btn.disabled = false;
+      });
+
+      es.addEventListener('error', () => {
+        line('err', 'Stream error — check server logs.');
+        es.close();
+        btn.disabled = false;
+      });
+    });
+  </script>
+</body>
+</html>
