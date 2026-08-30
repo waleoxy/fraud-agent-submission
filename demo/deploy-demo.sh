@@ -5,7 +5,7 @@ set -euo pipefail
 # Separate service from your real production agent on purpose: this one
 # is meant to be public and free for anyone (including judges) to hit.
 
-PROJECT_ID="your-gcp-project"
+PROJECT_ID="fraud-agent-507009"
 REGION="us-central1"
 SERVICE_NAME="fraud-agent-demo"
 
