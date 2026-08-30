@@ -8,7 +8,10 @@ import { runContext } from './run-context';
 
 const ai = genkit({
   plugins: [vertexAI({ location: process.env.GCP_REGION ?? 'us-central1' })],
-  model: vertexAI.model('gemini-3.5-pro'),
+  // gemini-3.5-pro was never actually released as a public model ID —
+  // Gemini 3.5 Flash is the GA model in this generation. Flash still
+  // satisfies "Gemini 3.5 or newer."
+  model: vertexAI.model('gemini-3.5-flash'),
 });
 
 const ResolutionSchema = z.object({
