@@ -1,7 +1,7 @@
 # Fraud Resolution Agent
 
 An autonomous, ERP-agnostic fraud investigation agent. Built with Gemini
-3.5 (via Vertex AI) and Genkit. When a fraud rule flags a transaction,
+3.6 (via Vertex AI) and Genkit. When a fraud rule flags a transaction,
 this agent investigates it, decides a resolution, writes it back, and
 alerts the right person — with no human step in between.
 
@@ -9,7 +9,7 @@ Built for the Taskmaster category of the All Things Agentic Hackathon.
 
 ## Try it
 
-- **Live public demo** (no login required, safe fabricated data): _add your deployed `fraud-agent-demo` Cloud Run URL here_
+- **Live public demo** (no login required, safe fabricated data): https://fraud-agent-demo-mpftibd4jq-uc.a.run.app/
 - **Architecture diagram**: [`architecture-diagram.svg`](./architecture-diagram.svg)
 - **Full write-up**: see [`ABOUT.md`](./ABOUT.md) for inspiration, architecture, and what we learned building this
 

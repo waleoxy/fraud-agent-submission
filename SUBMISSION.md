@@ -1,10 +1,10 @@
-# HairVault Fraud Resolution Agent — Submission Text Description
+# Fraud Resolution Agent — Submission Text Description
 
 ## Category
 Taskmaster
 
 ## Problem / friction (Bring Your Own Friction)
-HairVault ERP already runs an 18-rule async fraud detection system across a
+HairVault ERP the app that forment the inspiration; already runs an 18-rule async fraud detection system across a
 multi-branch hair product wholesale/retail business in Nigeria. When a rule
 fires, a human still has to manually pull branch transaction history, check
 the supplier's risk profile, decide whether to clear, reverse, or escalate
@@ -31,7 +31,7 @@ guessing — it fails safe, not silent.
   runs inside the same NestJS process and dependency-injection graph as the
   rest of HairVault ERP, rather than a separate polyglot service
 - **Google Cloud Run** — private service, invoked only via an authenticated
-  Pub/Sub push subscription (not publicly exposed)
+  Pub/Sub push subscription
 - **Cloud Pub/Sub** — decouples the existing BullMQ fraud-detection queue
   from the agent
 - **Firestore** — per-transaction run state and audit/reasoning log,
@@ -57,18 +57,3 @@ ERP's own source is referenced only as an external API dependency, in the
 same way a Taskmaster agent might integrate with an existing calendar or
 email account.
 
-## Findings and learnings
-[Fill in once you've actually run it: e.g. what the agent got wrong on
-early runs, why the escalate-on-uncertainty fallback mattered in practice,
-any tuning done to the investigation prompt, latency/cost observations
-from Vertex AI, anything that surprised you about tool-calling reliability.]
-
-## Testing instructions
-- Health check: `GET {service-url}/fraud-agent/healthz`
-- Trigger a test run: publish a message to the `fraud-agent-events` Pub/Sub
-  topic with `{ transactionId, branchId, supplierId, flagReason }`
-- Verify: check the `fraudAgentRuns` collection in Firestore for the
-  resulting run document, and the ledger/notification side effects in
-  HairVault ERP
-- [Add login credentials here if the HairVault ERP testing environment is
-  not public]

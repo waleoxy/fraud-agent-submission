@@ -158,7 +158,7 @@ Create or edit `.env` (local) and note these for Cloud Run later:
 
 ```bash
 GOOGLE_GENAI_USE_VERTEXAI=true
-GCP_REGION=us-central1
+GCP_REGION=us-global
 GOOGLE_CLOUD_PROJECT=your-gcp-project
 HAIRVAULT_API_URL=http://localhost:3000   # your actual API base URL
 FRAUD_AGENT_TOPIC=fraud-agent-events
@@ -295,29 +295,3 @@ a few seconds in the demo video alongside the HairVault run.
 
 ---
 
-## 10. Finish the written submission
-
-Once step 7 has actually run successfully at least once:
-
-- Fill in **Challenges we ran into**, **Accomplishments**, and **What we
-  learned** in `ABOUT.md` with what genuinely happened (a flaky tool call,
-  a prompt tweak that fixed a bad decision, latency numbers, etc.) — and
-  if you did step 9, the second-adapter proof is a genuine accomplishment
-  worth naming explicitly
-- Drop the architecture diagram into `SUBMISSION.md`
-- Write the README spin-up instructions from the exact commands in
-  sections 1–7 above, since you now know they work
-- Fill in real testing credentials/instructions in `SUBMISSION.md`
-
----
-
-## 11. Record and submit
-
-- Screen-record: the `gcloud pubsub topics publish` command firing → Cloud
-  Run logs streaming live → the Firestore document appearing → the ledger
-  update → the alert landing → a few seconds on the Cloud Run dashboard →
-  (if done) the second adapter proving the package installs and runs
-  against a different domain shape
-- Keep it under 4 minutes, unedited, upload to YouTube or Vimeo (public)
-- Submit on Devpost: category, repo link, hosted URL, text description,
-  video link — well before Aug 31, 5PM PT

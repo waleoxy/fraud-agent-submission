@@ -6,8 +6,15 @@ import { EventEmitter } from 'node:events';
 import { FRAUD_AGENT_ADAPTER, FraudAgentAdapter } from './fraud-agent-adapter.interface';
 import { runContext } from './run-context';
 
+// gemini-3.5-flash is not served from every single region (notably not
+// us-central1) — its regional list is asia-northeast1, asia-south1,
+// asia-southeast1, europe-west2, europe-west3, northamerica-northeast1.
+// The global endpoint routes to an available region automatically and
+// is documented as supporting "all regions," so it's the reliable
+// default here — independent of GCP_REGION, which only affects where
+// Cloud Run itself is deployed, not where the model call lands.
 const ai = genkit({
-  plugins: [vertexAI({ location: process.env.GCP_REGION ?? 'us-central1' })],
+  plugins: [vertexAI({ location: process.env.VERTEX_AI_LOCATION ?? 'global' })],
   // gemini-3.5-pro was never actually released as a public model ID —
   // Gemini 3.5 Flash is the GA model in this generation. Flash still
   // satisfies "Gemini 3.5 or newer."

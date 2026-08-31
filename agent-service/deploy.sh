@@ -5,7 +5,7 @@ set -euo pipefail
 # HairVault API. Private service, invoked only via an authenticated
 # Pub/Sub push subscription. Separate from fraud-agent-demo on purpose.
 
-PROJECT_ID="your-gcp-project"
+PROJECT_ID="fraud-resolution-agent"
 REGION="us-central1"
 SERVICE_NAME="fraud-agent"
 TOPIC_NAME="fraud-agent-events"
